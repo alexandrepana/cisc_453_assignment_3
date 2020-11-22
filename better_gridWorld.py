@@ -14,6 +14,7 @@ class Grid:
     # Create 2D array of wind at each position
     def generate_wind_array(self, wc1, wc2):
         self.wind_array = [[0 for x in range(self.width)] for y in range(self.height)]
+
         for r in range(self.height):
             for c in range(self.width):
                 wind = 0
@@ -46,6 +47,7 @@ class Grid:
         return string
     
     def move(self, action):
+        # Cardinal Moves
         if (action == Action.UP):
             self.y += 1
         elif (action == Action.DOWN):
@@ -54,6 +56,21 @@ class Grid:
             self.x -= 1
         elif (action == Action.RIGHT):
             self.x += 1
+        
+        # Kings Moves
+        elif (action == Action.UPRIGHT):
+            self.y += 1
+            self.x += 1
+        elif (action == Action.UPLEFT):
+            self.y += 1
+            self.x -= 1
+        elif (action == Action.DOWNRIGHT):
+            self.y -= 1
+            self.x += 1
+        elif (action == Action.DOWNLEFT):
+            self.y -= 1
+            self.x -= 1
+
 
     # Bulkier String
     # def __str__(self):
