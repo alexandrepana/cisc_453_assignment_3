@@ -41,15 +41,10 @@ class Grid:
         else:
             print(f'!!! ERROR !!!: Invalid action: {action}')
         
-
-
-
-
     
 class State:
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
+    def __init__(self, wind_value):
+        self.wind = wind_value
 
 
         
