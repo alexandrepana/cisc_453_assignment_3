@@ -3,7 +3,7 @@ import random
 
 class Sarsa:
     def __init__(self, states, actions):
-        self.epsilon = 0.3
+        self.epsilon = 0.3 # chance to take random
         self.actions = actions # action space
         self.policy = {} # Initialize each state at probability of 0
         for state in states:
