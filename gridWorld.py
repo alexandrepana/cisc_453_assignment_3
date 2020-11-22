@@ -12,7 +12,7 @@ class GridWorld:
         self.wc1 = wind_columns1 # wind columns are lists of [][indexes] with wind in them
         self.wc2 = wind_columns2 # columns are either valued at 1 or 2
         self.terminal = terminal_position # Designate a terminal position # terminal position is type Position,
-        self.grid = self.generate_grid() # Each grid cell contains a state
+        self.grid = self.generate_grid() # Each grid cell contains a value
 
     # used to by agents to check if a terminal state has been reached
     def is_position_terminal(self, position):
@@ -29,15 +29,7 @@ class GridWorld:
 
             for j in range(self.width): # Iterate over width of grid world
 
-                new_state = state.State( position.Position(i,j) ) # Initialize new state
-
-                if(j in self.wc1): # Check if it should have wind
-                    new_state.set_wind(1) # assign wind value
-
-                elif(j in self.wc2):
-                    new_state.set_wind(2) # assign wind value
-
-                temp.append(new_state) # build row
+                temp.append(0) # build row
             
             temp_grid.append(temp)
             

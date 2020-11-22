@@ -2,12 +2,11 @@
 # Base class for
 # all agent types
 class Agent:
-    def __init__(self, states, actions, epsilon, learn_rate, gamma): # This may need to be thinned out and seperated into appropriate agent types overrides
+    def __init__(self, grid, epsilon, learn_rate, gamma): # This may need to be thinned out and seperated into appropriate agent types overrides
         self.epsilon = epsilon  # chance to take random
-        self.actions = actions  # action space
         self.rate = learn_rate  # learn rate
         self.gamma = gamma      # gamma
-        self.policy = {}        # State dict initialized all at 0
+        self.policy = grid      # Grid world grid states as values
     
     # Define overides 
     def select_action(self, options):

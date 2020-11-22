@@ -1,6 +1,6 @@
 #!python3
 import random
-import agent
+from agent import Agent
 # ---Sarsa Agent---
 # Inherits from Agent
 # class. Overrides definitions

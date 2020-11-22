@@ -5,6 +5,7 @@ import position
 import sarsa
 import qLearning
 import agent
+from actions import Actions
 
 # Grid World properties
 height = 7
@@ -18,21 +19,22 @@ epsilon = 0.3 # Chance of making random decision
 steps = 10000
 rate = 0.001
 gamma = 0.85
-actions = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"]
 
 # Initializes a Grid World
 def make_world():
     return gridWorld.GridWorld(height,width, terminal_position, windy_columns_1, windy_columns_2)
 
 # Create an agent object of given type
-def make_agent(states, agent_type):
+def make_agent(grid, agent_type):
     if(agent_type == "sarsa"):
-        return sarsa.Sarsa(states, actions, epsilon, rate, gamma)
+        return sarsa.Sarsa(grid, epsilon, rate, gamma)
     elif(agent_type == "q"):
-        return agent.Agent(states, actions, epsilon, rate, gamma) # replace with q-learn
+        return agent.Agent(grid, epsilon, rate, gamma) # replace with q-learn
     else:
-        return agent.Agent(states, actions, epsilon, rate, gamma)
+        return agent.Agent(grid, epsilon, rate, gamma)
 
 def run(agent_type):
     world = make_world()
     agent = make_agent(world.grid, agent_type)
+
+#run("sarsa")
