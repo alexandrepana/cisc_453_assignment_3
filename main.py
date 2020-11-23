@@ -19,6 +19,7 @@ gamma = 0.85
 # Agent Training properties
 episodes = 10000
 steps = 100
+reward = 0
 
 # Initializes a Grid World
 def make_world():
@@ -33,14 +34,39 @@ def make_agent(grid, agent_type):
     else:
         return Agent(grid, epsilon, rate, gamma)
 
-def run(agent_type):
+def train(agent_type):
     world = make_world()
     agent = make_agent(world.grid, agent_type)
 
     for episode in range(episodes):
-        attempts = 0
+
+        # Initialize episode spawn and initial action
+        move_count = 0 # reset move counter
         state_1 = world.find_spawn()
-        action1 = agent.select_action(state_1, world)
+        action_1 = agent.select_action(state_1)
 
+        while move_count < steps:
 
-run("sarsa")
+            # Get the next state
+            state_2 = world.move(action_1)
+            
+            # choose next action
+            action_2 = agent.select_action(state_2)
+
+            # Update q value 
+            agent.update_policy(state_1, action_1, state_2, action_2, reward)
+
+            # assign new action states
+            state_1 = state_2
+            action_1 = action_2
+
+            # update move count and reward 
+            move_count+=1
+            reward -= 1
+
+            # check if state is terminal
+            if(world.is_position_terminal(state_1)): break
+
+    return agent
+
+trained_agent = train("sarsa")

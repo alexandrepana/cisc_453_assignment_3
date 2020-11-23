@@ -1,4 +1,5 @@
 import random
+from actions import Actions
 #   ----Grid World----
 # This class object is the Grid World game
 # maintaining information on every grid tile
@@ -28,12 +29,46 @@ class GridWorld:
 
         for i in range(self.height): # Iterate over height of grid world
             
-            temp = []
+            temp_row = []
 
             for j in range(self.width): # Iterate over width of grid world
 
-                temp.append(0) # build row
-            
-            temp_grid.append(temp)
+                temp_dict = {} 
+
+                for action in Actions:
+                    
+                    temp_dict[action] = 0 # generate state action values
+
+                temp_row.append(temp_dict) # build list of dictionaries
+
+            temp_grid.append(temp_row) # build row with list of dictionaries
             
         return temp_grid
+
+    def move(self, state, action):
+        
+        # find new cordinates according to current state and action
+        x = state[0] + action.value[0]
+        y = state[1] + action.value[1]
+
+        # check if x and y represent a real state
+        if(x >= self.width | x < 0 | y >= self.height | y < 0):
+            return state # we don't move
+
+        # update y according to wind
+        if(x in self.wc1):
+            y = clamp(y + 1, self.height - 1, 0)
+        elif(x in self.wc2):
+            y = clamp(y + 2, self.height - 1, 0)
+            
+        return [x, y]
+
+# Utility function used to stop wind from moving agent off the grid
+def clamp(value, max_value, min_value):
+        
+    if( value > max_value):
+        value = max_value
+    elif( value < min_value):
+        value = min_value
+            
+    return value
