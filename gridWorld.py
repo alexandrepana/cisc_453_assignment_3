@@ -5,8 +5,8 @@ from actions import Actions
 # maintaining information on every grid tile
 
 class GridWorld:
-    def __init__(self, height, width, terminal_position, wind_columns1, wind_columns2): 
-        self.height = height                                                            
+    def __init__(self, height, width, terminal_position, wind_columns1, wind_columns2):
+        self.height = height
         self.width = width
         self.wc1 = wind_columns1 # wind columns are lists of [][indexes] with wind in them
         self.wc2 = wind_columns2 # columns are either valued at 1 or 2
