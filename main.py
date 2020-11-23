@@ -69,4 +69,10 @@ def train(agent_type):
 
     return agent
 
-trained_agent = train("sarsa")
+# trained_agent = train("sarsa")
+# trained_agent.output_policy()
+
+world = make_world()
+agent = make_agent(world.grid, "sarsa")
+
+print(agent.select_action([0,0]))

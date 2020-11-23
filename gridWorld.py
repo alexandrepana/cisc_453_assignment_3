@@ -48,21 +48,22 @@ class GridWorld:
     def move(self, state, action):
         
         # find new cordinates according to current state and action
-        x = state[0] + action.value[0]
-        y = state[1] + action.value[1]
-
-        # check if x and y represent a real state
-        if(x >= self.width | x < 0 | y >= self.height | y < 0):
-            return state # we don't move
+        x = state[0] + action.value[0] 
+        y = state[1] + action.value[1] + random.choice([-1,0,1]) 
 
         # update y according to wind
         if(x in self.wc1):
-            y = clamp(y + 1, self.height - 1, 0)
+            y += 1
         elif(x in self.wc2):
-            y = clamp(y + 2, self.height - 1, 0)
-            
+            y += 2
+
+        # check if x and y are in grid world still
+        if(x >= self.width | x < 0 | y >= self.height | y < 0):
+            return state # we don't move
+
         return [x, y]
 
+# --- Deprecated --- #
 # Utility function used to stop wind from moving agent off the grid
 def clamp(value, max_value, min_value):
         
