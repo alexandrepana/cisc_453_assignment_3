@@ -1,6 +1,4 @@
-import state
-import position
-
+import random
 #   ----Grid World----
 # This class object is the Grid World game
 # maintaining information on every grid tile
@@ -18,6 +16,11 @@ class GridWorld:
     def is_position_terminal(self, position):
         return (position == self.terminal)
     
+    def find_spawn(self):
+        spawn = [random.randint(0, self.width-1), random.randint(0, self.height-1)]
+        if(self.is_position_terminal(spawn)): return find_spawn() # recursively search for a non terminal spawn position
+        return(spawn)
+
     # grid world generator. This definition handles state creation, position assignment, and wind value assignment
     def generate_grid(self):
 

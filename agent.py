@@ -7,10 +7,10 @@ class Agent:
         self.rate = learn_rate  # learn rate
         self.gamma = gamma      # gamma
         self.policy = grid      # Grid world grid states as values
-    
+
     # Define overides 
-    def select_action(self, options):
-        return max(options)
+    def select_action(self):
+        return 0
     
     def update_policy(self, current_state, current_action, next_state, next_action, reward):
-        return self.policy
+        return 0
