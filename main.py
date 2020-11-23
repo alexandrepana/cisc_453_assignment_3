@@ -22,15 +22,18 @@ def train_sarsa(grid, episodes):
 
             # S = S', A = A'
 
-def train_q_learning(grid, episodes, actions):
+def train_q_learning(grid, episodes, max_steps, actions):
     q_learner = q_learning.Q_Learner(grid, actions)
     print(grid)
     print(f'Starting Position on Grid: ({grid.x}, {grid.y})')
 
     # Loop for each episode
     for episode in range(episodes):
+        step = 1
+
         # Initialize state
         grid.randomize_position()
+        action = q_learner.select_action(grid)
 
         # Loop for each step of episode
         while (not grid.at_terminal()):
@@ -39,14 +42,21 @@ def train_q_learning(grid, episodes, actions):
             print(f'Before action: ({grid.x}, {grid.y})')
 
             # Choose A from S using policy derived from Q
+            prev_action = action
             action = q_learner.select_action(grid)
 
             # Execute action
-            grid.move(action)
+            prev_x = grid.x
+            prev y = grid.y
+            reward = grid.move(action)
 
             print(f'After {action}: ({grid.x}, {grid.y})')
 
             input("Press Enter to continue...")
+
+            step += 1
+            if (step > max_steps):
+                break
 
 
 
@@ -55,6 +65,7 @@ def train_q_learning(grid, episodes, actions):
 def __main__():
     # Define training variables
     episodes = 1000
+    max_steps = 200
     cardinal_moves = [Action.UP, Action.DOWN, Action.LEFT, Action.RIGHT]
     kings_moves = [Action.UP, Action.DOWN, Action.LEFT, Action.RIGHT, Action.UPRIGHT, Action.UPLEFT, Action.DOWNRIGHT, Action.DOWNLEFT]
 
@@ -68,7 +79,7 @@ def __main__():
 
     # train_sarsa(episodes)
 
-    train_q_learning(grid, episodes, cardinal_moves)
+    train_q_learning(grid, episodes, max_steps, cardinal_moves)
 
 
     

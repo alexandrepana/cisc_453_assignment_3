@@ -1,5 +1,6 @@
 from actions import Action
 import random
+
 #   ----Grid World----
 # This class object is the Grid World game
 # maintaining information on every grid tile
@@ -47,6 +48,8 @@ class Grid:
         return string
     
     def move(self, action):
+        reward = 0
+
         # Cardinal Moves
         if (action == Action.UP):
             self.y += 1
@@ -70,6 +73,8 @@ class Grid:
         elif (action == Action.DOWNLEFT):
             self.y -= 1
             self.x -= 1
+
+        return reward
 
 
     # Bulkier String
