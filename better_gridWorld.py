@@ -32,8 +32,6 @@ class Grid:
     def at_terminal(self):
         yes = (self.x == self.terminal[0] and self.y == self.terminal[1])
         if (yes):
-            print(self.terminal[0])
-            print(self.terminal[1])
             print('>>> TERMINAL REACHED!')
         return yes
     
@@ -78,22 +76,9 @@ class Grid:
             new_y = 0
 
 
-        print(f'Moving {action} from ({self.x}, {self.y}) to ({new_x}, {new_y})')
+        # print(f'Moving {action} from ({self.x}, {self.y}) to ({new_x}, {new_y})')
 
         self.x = new_x
         self.y = new_y
         
         return self.reward   # return reward
-
-
-    # Bulkier String
-    # def __str__(self):
-    #     divider = ("----" * self.width) + "--"
-    #     string = f"\n{divider}\n"
-
-    #     for r in range(self.height):
-    #         for c in range(self.width):
-    #             string = f"{string} | {self.wind_array[r][c]}"
-    #         string = f"{string} |\n{divider}\n"
-        
-    #     return string
