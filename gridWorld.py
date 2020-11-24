@@ -1,4 +1,5 @@
 import random
+import actions
 from actions import Actions
 #   ----Grid World----
 # This class object is the Grid World game
@@ -18,8 +19,8 @@ class GridWorld:
         return (position == self.terminal)
     
     def find_spawn(self):
-        spawn = [random.randint(0, self.width-1), random.randint(0, self.height-1)]
-        if(self.is_position_terminal(spawn)): return find_spawn() # recursively search for a non terminal spawn position
+        spawn = [random.randint(0, self.height-1), random.randint(0, self.width-1)]
+        if(self.is_position_terminal(spawn)): return self.find_spawn() # recursively search for a non terminal spawn position
         return(spawn)
 
     # grid world generator. This definition handles state creation, position assignment, and wind value assignment
@@ -47,18 +48,21 @@ class GridWorld:
 
     def move(self, state, action):
         
-        # find new cordinates according to current state and action
-        x = state[0] + action.value[0] 
-        y = state[1] + action.value[1] + random.choice([-1,0,1]) 
+        x = state[1]
+        y = state[0]
 
         # update y according to wind
         if(x in self.wc1):
-            y += 1
+            y -= 1
         elif(x in self.wc2):
-            y += 2
+            y -= 2
+
+        # find new cordinates according to current state and action
+        x = x + list(action.value)[0] 
+        y = y + list(action.value)[1] + random.choice([-1,0,1]) 
 
         # check if x and y are in grid world still
-        if(x >= self.width | x < 0 | y >= self.height | y < 0):
+        if(y >= self.width or y < 0 or x >= self.height or x < 0):
             return state # we don't move
 
         return [x, y]
