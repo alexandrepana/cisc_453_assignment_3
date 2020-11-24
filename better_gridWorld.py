@@ -1,4 +1,4 @@
-from actions import Action
+from actions import Actions
 import random
 
 #   ----Grid World----
@@ -9,6 +9,7 @@ class Grid:
         self.width = width
         self.height = height
         self.terminal = terminal_position
+        self.reward = -1
         self.generate_wind_array(wind_columns1, wind_columns2)
         self.randomize_position()
     
@@ -29,7 +30,12 @@ class Grid:
 
     # Returns true if given position is terminal
     def at_terminal(self):
-        return (self.x == self.terminal[0] and self.y == self.terminal[1])
+        yes = (self.x == self.terminal[0] and self.y == self.terminal[1])
+        if (yes):
+            print(self.terminal[0])
+            print(self.terminal[1])
+            print('>>> TERMINAL REACHED!')
+        return yes
     
     # Returns a random coordinate on the grid
     def randomize_position(self):
@@ -48,33 +54,36 @@ class Grid:
         return string
     
     def move(self, action):
-        reward = 0
+        # find new cordinates according to current state and action
+        new_x = self.x + action.value[0] 
+        new_y = self.y + action.value[1] + random.choice([-1,0,1])  # Comment out the random.choice for deterministic
 
-        # Cardinal Moves
-        if (action == Action.UP):
-            self.y += 1
-        elif (action == Action.DOWN):
-            self.y -= 1
-        elif (action == Action.LEFT):
-            self.x -= 1
-        elif (action == Action.RIGHT):
-            self.x += 1
+        # update y according to wind
+        new_y -= self.wind_array[self.y][self.x]
+
+        # check if x and y are in grid world still
+        # if(new_x >= self.width or new_x < 0 or new_y >= self.height or new_y < 0):
+        #     new_x = self.x
+        #     new_y = self.y
+
+        # Make sure new position is inside the bounds (clamp)
+        if (new_x >= self.width):
+            new_x = self.width - 1
+        elif (new_x < 0):
+            new_x = 0
+
+        if (new_y >= self.height):
+            new_y = self.height - 1
+        elif (new_y < 0):
+            new_y = 0
+
+
+        print(f'Moving {action} from ({self.x}, {self.y}) to ({new_x}, {new_y})')
+
+        self.x = new_x
+        self.y = new_y
         
-        # Kings Moves
-        elif (action == Action.UPRIGHT):
-            self.y += 1
-            self.x += 1
-        elif (action == Action.UPLEFT):
-            self.y += 1
-            self.x -= 1
-        elif (action == Action.DOWNRIGHT):
-            self.y -= 1
-            self.x += 1
-        elif (action == Action.DOWNLEFT):
-            self.y -= 1
-            self.x -= 1
-
-        return reward
+        return self.reward   # return reward
 
 
     # Bulkier String

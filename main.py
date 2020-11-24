@@ -3,8 +3,6 @@ from gridWorld import GridWorld
 from sarsa import Sarsa
 from agent import Agent
 from actions import Actions
-
-from actions import Action
 import better_gridWorld
 import q_learning
 
@@ -91,10 +89,9 @@ def train(agent_type):
 # ALEX'S CODE
 #####################
 
-def train_q_learning(grid, episodes, max_steps, actions):
-    q_learner = q_learning.Q_Learner(grid, actions)
+def train_q_learning(grid, episodes, max_steps, actions, epsilon, learning_rate, discount):
+    q_learner = q_learning.Q_Learner(grid, actions, epsilon, learning_rate, discount)
     print(grid)
-    print(f'Starting Position on Grid: ({grid.x}, {grid.y})')
 
     # Loop for each episode
     for episode in range(episodes):
@@ -102,39 +99,43 @@ def train_q_learning(grid, episodes, max_steps, actions):
 
         # Initialize state
         grid.randomize_position()
-        action = q_learner.select_action(grid)
+        print(f'Starting Position on Grid: ({grid.x}, {grid.y})')
+        # action = q_learner.select_action(grid)
 
+        reward2 = 0
         # Loop for each step of episode
         while (not grid.at_terminal()):
-            # grid.randomize_position()
-
-            print(f'Before action: ({grid.x}, {grid.y})')
 
             # Choose A from S using policy derived from Q
-            prev_action = action
             action = q_learner.select_action(grid)
 
             # Execute action
             prev_x = grid.x
             prev_y = grid.y
             reward = grid.move(action)
+            reward2 -= 1
 
-            print(f'After {action}: ({grid.x}, {grid.y})')
+            q_learner.update_policy([prev_y, prev_x], action, [grid.y, grid.x], reward)
+
+            # q_learner.print_policy()
 
             input("Press Enter to continue...")
 
             step += 1
             if (step > max_steps):
+                print('>>> Max Steps reached.')
                 break
+        print(f'Steps until completion: {step}')
+        input("Press Enter to continue...")
 
 
 
 def __main__():
     # Define training variables
     episodes = 1000
-    max_steps = 200
-    cardinal_moves = [Action.UP, Action.DOWN, Action.LEFT, Action.RIGHT]
-    kings_moves = [Action.UP, Action.DOWN, Action.LEFT, Action.RIGHT, Action.UPRIGHT, Action.UPLEFT, Action.DOWNRIGHT, Action.DOWNLEFT]
+    max_steps = 10000
+    cardinal_moves = [Actions.n, Actions.e, Actions.s, Actions.w]
+    kings_moves = [Actions.n, Actions.e, Actions.s, Actions.w, Actions.ne, Actions.nw, Actions.se, Actions.sw]
 
     # Define our Grid
     width = 10
@@ -144,9 +145,12 @@ def __main__():
     terminal_position = (7, 4)
     grid = better_gridWorld.Grid(width, height, terminal_position, wind_columns1, wind_columns2)
 
-    # train_sarsa(episodes)
-
-    train_q_learning(grid, episodes, max_steps, cardinal_moves)
+    # Values
+    
+    epsilon = 0.05
+    learning_rate = 0.001
+    discount = 0.85
+    train_q_learning(grid, episodes, max_steps, cardinal_moves, epsilon, learning_rate, discount)
 
 
     
