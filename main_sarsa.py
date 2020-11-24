@@ -13,13 +13,13 @@ windy_columns_1   = [4-1, 5-1, 6-1, 9-1]
 windy_columns_2   = [8-1,7-1]
 
 # Agent properties
-epsilon = 0.3 # Chance of making random decision
+epsilon = 0.9 # Chance of making random decision
 rate = 0.001
 gamma = 0.85
 # Agent Training properties
-episodes = 10000
-steps = 100
-reward = 0
+episodes = 1000
+steps = 500
+
 
 # Initializes a Grid World
 def make_world():
@@ -35,6 +35,7 @@ def make_agent(grid, agent_type):
         return Agent(grid, epsilon, rate, gamma)
 
 def train(agent_type):
+    reward = 0
     world = make_world()
     agent = make_agent(world.grid, agent_type)
 
@@ -45,13 +46,18 @@ def train(agent_type):
         state_1 = world.find_spawn()
         action_1 = agent.select_action(state_1)
 
+        #print(agent.policy)
+
         while move_count < steps:
 
+            #print("action one = " + str(action_1))
             # Get the next state
-            state_2 = world.move(action_1)
+            state_2 = world.move(state_1, action_1)
             
             # choose next action
             action_2 = agent.select_action(state_2)
+
+            #print("action two = " + str(action_2))
 
             # Update q value 
             agent.update_policy(state_1, action_1, state_2, action_2, reward)
@@ -66,13 +72,10 @@ def train(agent_type):
 
             # check if state is terminal
             if(world.is_position_terminal(state_1)): break
+        
+        print(move_count)
 
     return agent
 
-# trained_agent = train("sarsa")
-# trained_agent.output_policy()
-
-world = make_world()
-agent = make_agent(world.grid, "sarsa")
-
-print(agent.select_action([0,0]))
+trained_agent = train("sarsa")
+trained_agent.output_policy()

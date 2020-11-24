@@ -1,4 +1,5 @@
 #!python3
+import operator
 import random
 from agent import Agent
 from actions import Actions
@@ -11,18 +12,19 @@ class Sarsa(Agent):
     def select_action(self, state):
 
         x = random.random() # create random float between 0 - 1
-
+        #print(state)
         if (x > self.epsilon):
-            max_value = max(self.policy[state[0]][state[1]].values) # determine the highest value
-            max_keys = [k for k, v in self.policy.items() if v == max_value] # determine their keys
-            return random.choice(list(max_keys)) # return an action with the highest value
+            max_value = max(self.policy[state[0]][state[1]], key=self.policy[state[0]][state[1]].get) # determine the highest value key
+            # print("greedy action")
+            return max_value # return an action with the highest value
         else:
-            return random.choice(list(Actions)) # return a random action
+            # print("Random action")
+            return random.choice(list(self.policy[state[0]][state[1]].keys())) # return a random action
 
     def update_policy(self, state, action, next_state, next_action, reward):
-        expected = self.policy[state[0],state[1]][action]
-        actual = reward + self.gamma * self.policy[next_action[0], next_action[1]][next_action]
-        self.policy[state[0], state[1]][action] += self.rate * (actual - expected)
+        expected = self.policy[state[0]][state[1]][action]
+        actual = reward + self.gamma * self.policy[next_state[0]][next_state[1]][next_action]
+        self.policy[state[0]][state[1]][action] = self.policy[state[0]][state[1]][action] + self.rate * (actual - expected)
         
 
     def output_policy(self): # print utility
@@ -30,5 +32,7 @@ class Sarsa(Agent):
             row = []
             for cell in row:
                 row.append(cell.value)
-            print(row)
+                if(cell.value == 0):
+                    print("There is a 0 key")
+            #print(row)
 
